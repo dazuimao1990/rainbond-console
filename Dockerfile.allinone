@@ -48,9 +48,11 @@ RUN chmod +x /app/ui/entrypoint.sh &&  \
 RUN wget -O docker.tgz 'https://download.docker.com/linux/static/stable/x86_64/docker-20.10.11.tgz' \
 	&& tar xzf docker.tgz --strip-components 1 --directory /usr/local/bin/ \
 	&& rm docker.tgz \
+    && mkdir -p /etc/docker \
     && mv daemon.json /etc/docker/ \
     && wget -O /usr/local/bin/k3s "https://github.com/rancher/k3s/releases/download/v1.22.3+k3s1/k3s" \
-    && wget -O /usr/local/bin/kubectl "https://dl.k8s.io/release/v1.22.3/bin/linux/amd64/kubectl"
+    && wget -O /usr/local/bin/kubectl "https://dl.k8s.io/release/v1.22.3/bin/linux/amd64/kubectl" \
+    && chmod +x /usr/local/bin/k3s /usr/local/bin/kubectl
 
 ENV PORT 7070
 ENV IS_OPEN_API=true
@@ -66,6 +68,7 @@ ENV MYSQL_DB=console
 VOLUME /app/data
 VOLUME /app/logs
 VOLUME /app/k3s
+VOLUME /opt/rainbond
 VOLUME /root/.ssh
 VOLUME /var/lib/docker
 
